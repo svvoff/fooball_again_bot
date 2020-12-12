@@ -8,6 +8,7 @@ import logging
 import json
 import datetime as dt
 import unicodedata
+import random
 
 # Logging
 logging.basicConfig(level=logging.DEBUG,
@@ -23,25 +24,34 @@ class App:
     def __init__(self, token):
         self.updater = Updater(token=token)
         self.update_triggers()
+        self.update_answers()
         self.messages_counter = 3
         self.last_handled_message_date = None
         self.inter_messages_dealy_seconds = 10
     
     def run(self):
         updater = self.updater
-        updater.dispatcher.add_handler(CommandHandler('update_triggers', self.update_triggers))
+        updater.dispatcher.add_handler(CommandHandler('update_triggers', self.update_triggers_handler))
+        updater.dispatcher.add_handler(CommandHandler('update_answers', self.update_answers_handler))
         updater.dispatcher.add_handler(MessageHandler(Filters.all, self.messages_handler))
 
         updater.start_polling()
         updater.idle()
 
 
-    def update_triggers(self, update: Update, context: CallbackContext) -> None:
+    def update_triggers_handler(self, update: Update, context: CallbackContext) -> None:
         self.update_triggers()
         message = update.message
         new_triggers = "\n".join(self.triggers)
         message.reply_text("Triggers were updated")
         context.bot.send_message(chat_id=update.effective_chat.id, text=new_triggers)
+
+    def update_answers_handler(self, update: Update, context: CallbackContext) -> None:
+        self.update_answers()
+        message = update.message
+        new_answers = "\n".join(self.answers)
+        message.reply_text("Answers were updated")
+        context.bot.send_message(chat_id=update.effective_chat.id, text=new_answers)
     
     def messages_handler(self, update: Update, context: CallbackContext) -> None:
         message = update.message
@@ -87,7 +97,7 @@ class App:
         if self.messages_counter <= 0:
             self.messages_counter = 10
             self.last_handled_message_date = message.dat
-        msg = "Опять футбик"
+        msg = random.choice(self.answers)
         message.reply_text(msg)
 
     def update_triggers(self):
@@ -95,6 +105,11 @@ class App:
             data = json.load(json_file)
             self.triggers = data['triggers']
             self.emojis = data['emojis']
+    
+    def update_answers(self):
+        with open('answers.json') as json_file:
+            data = json.load(json_file)
+            self.answers = data
 
 app = App(TOKEN)
 app.run()
