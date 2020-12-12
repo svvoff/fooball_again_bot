@@ -97,8 +97,9 @@ class App:
         if self.messages_counter <= 0:
             self.messages_counter = 10
             self.last_handled_message_date = message.dat
+        idx = random.randint(0, len(self.answers))
         msg = random.choice(self.answers)
-        message.reply_text(msg)
+        message.reply_text(msg + ' ' + str(idx))
 
     def update_triggers(self):
         with open('footbick.json') as json_file:
