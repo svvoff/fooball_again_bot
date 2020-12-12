@@ -47,22 +47,26 @@ class App:
         message = update.message
         
         text = None
-        emoji = False
+        is_emoji = False
         if message.text:
             text = message.text.lower()
         elif message.dice:
-            emoji = True
+            is_emoji = True
             text = message.dice.emoji
 
         if text == None:
             return
 
-        if emoji:
-            for e in self.emojis:
-                if str(e) == text:
-                    self.reply_if_needed(update = update, context = context)
+        if is_emoji:
+            for emoji in self.emojis:
+                should_break = False
+                for e in emoji:
+                    if text.count(e) > 0:
+                        should_break = True
+                        self.reply_if_needed(update = update, context = context)
+                        break
+                if should_break:
                     break
-
         else:
             for trigger in self.triggers:
                 if trigger in text:
