@@ -101,7 +101,7 @@ class App:
         message.reply_text(msg)
 
     def update_triggers(self):
-        with open('footbick.json') as json_file:
+        with open('triggers.json') as json_file:
             data = json.load(json_file)
             self.triggers = data['triggers']
             self.emojis = data['emojis']
