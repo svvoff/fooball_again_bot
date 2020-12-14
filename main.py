@@ -22,6 +22,7 @@ TOKEN = os.getenv('TOKEN')
 
 class App:
     def __init__(self, token):
+        self.bot_name = "football_again_bot"
         self.updater = Updater(token=token)
         self.update_triggers()
         self.update_answers()
@@ -55,6 +56,11 @@ class App:
     
     def messages_handler(self, update: Update, context: CallbackContext) -> None:
         message = update.message
+
+        reply_to_message = message.reply_to_message
+        if reply_to_message and reply_to_message.from_user.username == self.bot_name:
+            self.replies_handler(update, context)
+            return
         
         text = None
         is_emoji = False
@@ -83,6 +89,9 @@ class App:
                     self.reply_if_needed(update = update, context = context)
                     break
                 
+    def replies_handler(self, update: Update, context: CallbackContext) -> None:
+        message = update.message
+        message.reply_text("А ну отъебись от меня кожанный мешок! Не видишь работаю! Сидит, блядь, выписывает тут!")
     
     def reply_if_needed(self, update: Update, context: CallbackContext) -> None:
         message = update.message
