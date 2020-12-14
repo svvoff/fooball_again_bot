@@ -91,7 +91,7 @@ class App:
                 
     def replies_handler(self, update: Update, context: CallbackContext) -> None:
         message = update.message
-        message.reply_text("А ну отъебись от меня кожанный мешок! Не видишь работаю! Сидит, блядь, выписывает тут!")
+        message.reply_text("А ну отъебись от меня пес паршивый! Не видишь работаю!? Сидит, блядь, выписывает тут!")
     
     def reply_if_needed(self, update: Update, context: CallbackContext) -> None:
         message = update.message
