@@ -105,7 +105,7 @@ class App:
         self.messages_counter -= 1
         if self.messages_counter <= 0:
             self.messages_counter = 10
-            self.last_handled_message_date = message.dat
+            self.last_handled_message_date = message.date
         msg = random.choice(self.answers)
         message.reply_text(msg)
 
