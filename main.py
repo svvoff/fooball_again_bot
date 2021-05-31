@@ -50,7 +50,7 @@ class App:
     def update_answers_handler(self, update: Update, context: CallbackContext) -> None:
         self.update_answers()
         message = update.message
-        new_answers = "\n".join(self.answers)
+        new_answers = "\n\n".join(self.answers)
         message.reply_text("Answers were updated")
         context.bot.send_message(chat_id=update.effective_chat.id, text=new_answers)
     
@@ -104,7 +104,7 @@ class App:
 
         self.messages_counter -= 1
         if self.messages_counter <= 0:
-            self.messages_counter = 10
+            self.messages_counter = 10000000
             self.last_handled_message_date = message.date
         msg = random.choice(self.answers)
         message.reply_text(msg)
